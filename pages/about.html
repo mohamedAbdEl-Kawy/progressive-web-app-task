@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - ITI PWA</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" href="../img/logo.jpg">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="../img/logo.jpg" alt="">
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="./about.html" class="active">About</a></li>
+                <li><a href="./contact.html">Contact</a></li>
+            </ul>
+            <button id="installBtn" class="install-btn" style="display: none;">
+                📥 Install App
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>About This Project</h1>
+        </section>
+
+        <section class="content">
+            <h2>Progressive Web Application Development</h2>
+            <p>This project is part of the ITI (Information Technology Institute) Progressive Web Applications course.
+                It demonstrates the essential concepts and technologies required to build modern PWAs.</p>
+
+            <h3>What is a Progressive Web App?</h3>
+            <p>A Progressive Web App (PWA) is a web application that uses modern web capabilities to deliver an app-like
+                experience to users. PWAs are:</p>
+
+            <h3>Key Technologies Used</h3>
+            <ul>
+                <li><strong>Service Workers:</strong> JavaScript workers that run independently of the main browser
+                    thread</li>
+                <li><strong>Web App Manifest:</strong> JSON file that describes your app and how it should behave</li>
+                <li><strong>Cache API:</strong> Enables offline functionality through intelligent caching strategies
+                </li>
+                <li><strong>HTTPS:</strong> Required for Service Workers and secure data transmission</li>
+                <li><strong>HTML5, CSS3, JavaScript:</strong> Modern web standards</li>
+            </ul>
+
+            <h3>This Project's Features</h3>
+            <ul>
+                <li> Service Worker registration and management</li>
+                <li> Cache-first caching strategy</li>
+                <li> Offline page fallback</li>
+                <li> 404 page for wrong URLs</li>
+                <li> Install button with custom modal</li>
+                <li> Responsive design</li>
+                <li> Automatic cache updates</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 ITI PWA Task D01.</p>
+    </footer>
+
+    <div id="installModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Install App</h2>
+            <p>Install this app on your device</p>
+            <button id="confirmInstall" class="btn-primary">Install</button>
+            <button id="cancelInstall" class="btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+{
+    "short_name": "Task 1",
+    "name": "ITI PWA Task 1",
+    "description": "Task 1 for ITI PWA Course",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "orientation": "any",
+    "scope": "/",
+    "background_color": "#010c23",
+    "theme_color": "#201810",
+    "icons": [
+        {
+        "src": "/img/logo512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+        },
+        {
+            "src": "./img/logo.png",
+            "sizes": "427x637",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "./img/logo1.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ]
+}

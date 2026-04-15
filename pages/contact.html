@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - ITI PWA</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="manifest" href="../manifest.json">
+    <link rel="icon" type="image/png" href="../img/logo.jpg">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="../img/logo.jpg" alt="">
+            </div>
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="./about.html">About</a></li>
+                <li><a href="./contact.html" class="active">Contact</a></li>
+            </ul>
+            <button id="installBtn" class="install-btn" style="display: none;">
+                📥 Install App
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="page-header">
+            <h1>Contact Us</h1>
+            <p>Get in touch with us for questions or feedback</p>
+        </section>
+
+        <section class="content">
+            <div class="contact-container">
+                <div class="contact-form">
+                    <h2>Send us a Message</h2>
+                    <form id="contactForm" class="form">
+                        <div class="form-group">
+                            <label for="name">Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject *</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message *</label>
+                            <textarea id="message" name="message" rows="6" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary">Send Message</button>
+                        <p id="formMessage" class="form-message" style="display: none;"></p>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <h2>Contact Information</h2>
+
+                    <div class="info-item">
+                        <h3>📍 Location</h3>
+                        <p>Information Technology Institute<br>Cairo, Egypt</p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>📧 Email</h3>
+                        <p><a href="mailto:info@iti.org.eg">info@iti.org.eg</a></p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>📱 Phone</h3>
+                        <p><a href="tel:+201234567890">+20 123 456 7890</a></p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>🕐 Hours</h3>
+                        <p>
+                            Monday - Friday: 9:00 AM - 5:00 PM<br>
+                            Saturday: 10:00 AM - 2:00 PM<br>
+                            Sunday: Closed
+                        </p>
+                    </div>
+
+                    <div class="info-item">
+                        <h3>🔗 Follow Us</h3>
+                        <div class="social-links">
+                            <a href="https://facebook.com" target="_blank">Facebook</a>
+                            <a href="https://twitter.com" target="_blank">Twitter</a>
+                            <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+                            <a href="https://instagram.com" target="_blank">Instagram</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 ITI PWA Task D01.</p>
+    </footer>
+
+    <div id="installModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Install App</h2>
+            <p>Install this app on your devic</p>
+            <button id="confirmInstall" class="btn-primary">Install</button>
+            <button id="cancelInstall" class="btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <script src="../js/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITI PWA - Home</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="./img/logo.jpg">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="./img/logo.jpg" alt="">
+            </div>
+            <ul class="nav-links">
+                <li><a href="./index.html" class="active">Home</a></li>
+                <li><a href="./pages/about.html">About</a></li>
+                <li><a href="./pages/contact.html">Contact</a></li>
+            </ul>
+            <button id="installBtn" class="install-btn" style="display: none;">
+                📥 Install App
+            </button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="hero">
+            <h1>ITI PWA Task Day 01</h1>
+            <p>Simple Progressive Web Application with offline support and installation capability</p>
+        </section>
+
+        <section class="features">
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Responsive Design</h3>
+                    <p>Works perfectly on all devices and screen sizes</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Offline Support</h3>
+                    <p>Access content even without internet connection</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Fast Loading</h3>
+                    <p>Service Workers cache assets for instant loading</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Installable</h3>
+                    <p>Install as a native app on your device</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content">
+            <h2>About This PWA</h2>
+            <ul>
+                <li>Service Worker registration and lifecycle management</li>
+                <li>Cache-first strategy for assets</li>
+                <li>Offline page fallback for network errors</li>
+                <li>Custom error handling for missing pages</li>
+                <li>Install prompt handling</li>
+                <li>Responsive and accessible design</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 ITI PWA Task D01.</p>
+    </footer>
+
+    <div id="installModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Install App</h2>
+            <p>Install this app on your device</p>
+            <button id="confirmInstall" class="btn-primary">Install</button>
+            <button id="cancelInstall" class="btn-secondary">Cancel</button>
+        </div>
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
