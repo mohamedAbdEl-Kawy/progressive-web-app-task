@@ -4,7 +4,7 @@ A **Progressive Web Application** built as part of the ITI PWA Course. This proj
 
 ## 🚀 Live Demo
 
-**[Live Demo Link](#)** ← *Add your live demo URL here*
+**[Live Demo Link](https://mohamedabdel-kawy.github.io/progressive-web-app-task/)** 
 
 ## ✨ Features
 
