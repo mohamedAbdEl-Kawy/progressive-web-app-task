@@ -45,56 +45,54 @@ self.addEventListener("activate", (activateEvent) => {
     );
 });
 
-
 self.addEventListener("fetch", (fetchEvent) => {
     const request = fetchEvent.request;
 
-    if (request.method !== "GET") {
-        return;
-    }
+    if (request.method !== "GET") return;
+
     if (request.mode === "navigate") {
         fetchEvent.respondWith(
-            caches.match(request).then((response) => {
-                if (response) {
-                    return response;
-                }
-                return fetch(request)
-                    .then((fetchResponse) => {
-                        if (fetchResponse && fetchResponse.status === 200) {
-                            const clonedResponse = fetchResponse.clone();
-                            caches.open(cacheName).then((cache) => {
-                                cache.put(request, clonedResponse);
-                            });
-                        }
-                        return fetchResponse;
-                    })
-                    .catch(() => {
-                        return caches.match(offlinePageUrl);
+            fetch(request)
+                .then((response) => {
+                    if (!response || response.status === 404) {
+                        return caches.match(notFoundPageUrl);
+                    }
+
+                    const clonedResponse = response.clone();
+                    caches.open(cacheName).then((cache) => {
+                        cache.put(request, clonedResponse);
                     });
-            }),
+
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match(offlinePageUrl);
+                }),
         );
-    } else {
-        fetchEvent.respondWith(
-            caches.match(request).then((response) => {
-                return (
-                    response ||
-                    fetch(request)
-                        .then((fetchResponse) => {
-                            if (fetchResponse && fetchResponse.status === 200) {
-                                const clonedResponse = fetchResponse.clone();
-                                caches.open(cacheName).then((cache) => {
-                                    cache.put(request, clonedResponse);
-                                });
-                            }
-                            return fetchResponse;
-                        })
-                        .catch(() => {
-                            return null;
-                        })
-                );
-            }),
-        );
+        return;
     }
+
+    fetchEvent.respondWith(
+        caches.match(request).then((cachedResponse) => {
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            return fetch(request)
+                .then((response) => {
+                    if (!response || response.status === 404) {
+                        return caches.match(notFoundPageUrl);
+                    }
+                    const clonedResponse = response.clone();
+                    caches.open(cacheName).then((cache) => {
+                        cache.put(request, clonedResponse);
+                    });
+
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match(notFoundPageUrl);
+                });
+        }),
+    );
 });
-
-

@@ -1,6 +1,6 @@
 if (navigator.serviceWorker) {
     navigator.serviceWorker
-        .register("./sw.js")
+        .register("../sw.js")
         .then((reg) => {
             console.log("Service Worker registered successfully", reg);
         })
@@ -168,3 +168,4 @@ function showStatusNotification(message, type) {
         notification.remove();
     }, 3000);
 }
+
