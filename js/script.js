@@ -169,3 +169,232 @@ function showStatusNotification(message, type) {
     }, 3000);
 }
 
+if (Notification.permission === "default") {
+    Notification.requestPermission().then((permission) => {
+        console.log("Notification permission:", permission);
+    });
+}
+
+let dbPromise = idb.open("taskDB", 1, (db) => {
+    if (!db.objectStoreNames.contains("tasks")) {
+        db.createObjectStore("tasks", { keyPath: "id", autoIncrement: true });
+    }
+});
+
+let tasks = [];
+
+document.getElementById("taskForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    addTask();
+});
+
+async function addTask() {
+    const name = document.getElementById("tname").value.trim();
+    const date = new Date(document.getElementById("tdate").value);
+
+    if (!name) {
+        alert("Please enter a task name");
+        return;
+    }
+
+    const db = await dbPromise;
+    const tx = db.transaction("tasks", "readwrite");
+    await tx.objectStore("tasks").add({
+        name,
+        date: date.getTime(),
+        notifiedApproaching: false,
+        notifiedOverdue: false,
+    });
+
+    document.getElementById("tname").value = "";
+    document.getElementById("tdate").value = "";
+
+    loadTasks();
+}
+
+async function loadTasks() {
+    const db = await dbPromise;
+    const tx = db.transaction("tasks", "readonly");
+    tasks = await tx.objectStore("tasks").getAll();
+    renderTasks();
+}
+
+function renderTasks() {
+    const container = document.getElementById("tasks");
+    container.innerHTML = "";
+
+    if (tasks.length === 0) {
+        container.innerHTML =
+            '<p class="no-tasks">No tasks yet. Add one to get started!</p>';
+        return;
+    }
+
+    tasks.forEach((task) => {
+        const el = document.createElement("div");
+        const isOverdue = new Date(task.date).getTime() < Date.now();
+        const isDone = task.notifiedApproaching && task.notifiedOverdue;
+        el.className = `task ${isDone ? "done" : ""} ${isOverdue && !isDone ? "overdue" : ""}`;
+
+        const formattedDate = new Date(task.date).toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+
+        el.innerHTML = `
+      <div class="task-content">
+        <div>
+          <strong class="task-name">${escapeHtml(task.name)}</strong>
+          <small class="task-date">${formattedDate}</small>
+        </div>
+        <div class="task-actions">
+          <button class="btn-complete" onclick="completeTask(${task.id})" title="Mark as done">✓</button>
+          <button class="btn-delete" onclick="deleteTask(${task.id})" title="Delete task">✕</button>
+        </div>
+      </div>
+    `;
+
+        container.appendChild(el);
+    });
+}
+
+async function completeTask(id) {
+    const db = await dbPromise;
+    const tx = db.transaction("tasks", "readwrite");
+    const store = tx.objectStore("tasks");
+    const task = await store.get(id);
+    if (task) {
+        task.notifiedApproaching = true;
+        task.notifiedOverdue = true;
+        await store.put(task);
+        loadTasks();
+    }
+}
+
+async function deleteTask(id) {
+    if (confirm("Are you sure you want to delete this task?")) {
+        const db = await dbPromise;
+        const tx = db.transaction("tasks", "readwrite");
+        await tx.objectStore("tasks").delete(id);
+        loadTasks();
+    }
+}
+
+async function showNotification(taskName, taskId, type = "overdue") {
+    if (Notification.permission !== "granted") {
+        console.log("Notification permission not granted");
+        return false;
+    }
+
+    let body = "";
+    let tag = "";
+
+    if (type === "approaching") {
+        body = `Task "${taskName}" is due in 1 hour!`;
+        tag = `approaching-${taskName}`;
+    } else if (type === "overdue") {
+        body = `Task "${taskName}" is overdue!`;
+        tag = `overdue-${taskName}`;
+    }
+
+    const reg = await navigator.serviceWorker.getRegistration();
+    if (!reg) {
+        console.log("Service Worker not registered");
+        return false;
+    }
+
+    try {
+        await reg.showNotification(taskName, {
+            body: body,
+            icon: "../img/logo.jpg",
+            badge: "../img/logo.jpg",
+            tag: tag,
+            requireInteraction: true,
+            data: { taskName, taskId, type },
+            actions: [
+                { action: "complete", title: "✓ Mark Done" },
+                { action: "close", title: "Close" },
+            ],
+        });
+        return true;
+    } catch (err) {
+        console.log("Error showing notification:", err);
+        return false;
+    }
+}
+
+async function markNotified(id, type = "overdue") {
+    const db = await dbPromise;
+    const tx = db.transaction("tasks", "readwrite");
+    const store = tx.objectStore("tasks");
+    const task = await store.get(id);
+
+    if (task) {
+        if (type === "approaching") {
+            task.notifiedApproaching = true;
+        } else if (type === "overdue") {
+            task.notifiedOverdue = true;
+        }
+        await store.put(task);
+
+        const inMemoryTask = tasks.find((t) => t.id === id);
+        if (inMemoryTask) {
+            if (type === "approaching") {
+                inMemoryTask.notifiedApproaching = true;
+            } else if (type === "overdue") {
+                inMemoryTask.notifiedOverdue = true;
+            }
+        }
+    }
+}
+
+async function checkTasks() {
+    const now = Date.now();
+    const oneHourMs = 60 * 60 * 1000;
+
+    for (const task of tasks) {
+        const taskTime = new Date(task.date).getTime();
+        const timeUntilDeadline = taskTime - now;
+
+        if (
+            !task.notifiedApproaching &&
+            timeUntilDeadline > 0 &&
+            timeUntilDeadline <= oneHourMs
+        ) {
+            const sent = await showNotification(
+                task.name,
+                task.id,
+                "approaching",
+            );
+            if (sent) await markNotified(task.id, "approaching");
+        }
+
+        if (!task.notifiedOverdue && taskTime <= now) {
+            const sent = await showNotification(task.name, task.id, "overdue");
+            if (sent) await markNotified(task.id, "overdue");
+        }
+    }
+}
+
+navigator.serviceWorker.addEventListener("message", (event) => {
+    if (event.data.type === "completeTask") {
+        completeTask(event.data.taskId);
+    } else if (event.data.type === "deleteTask") {
+        deleteTask(event.data.taskId);
+    }
+});
+
+function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+setTimeout(() => {
+    checkTasks();
+}, 1000);
+
+loadTasks();
+setInterval(checkTasks, 5000);

@@ -537,6 +537,193 @@ body {
     margin: 0.5rem;
 }
 
+.todo-wrapper {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+    box-shadow: var(--shadow-lg);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.todo-wrapper h1 {
+    color: var(--text-dark);
+    text-align: center;
+    margin: 2rem 0;
+    font-size: 2.5rem;
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 1rem;
+}
+
+.task-form {
+    background: var(--bg-light);
+    padding: 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    border-left: 4px solid var(--primary-color);
+}
+
+.task-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.task-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.task-form input[type="text"],
+.task-form input[type="datetime-local"] {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.task-form input[type="text"]:focus,
+.task-form input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(144, 27, 32, 0.1);
+}
+
+.task-form input[type="submit"] {
+    width: 100%;
+}
+
+.tasks-container {
+    margin-top: 2rem;
+    min-height: 100px;
+}
+
+.no-tasks {
+    text-align: center;
+    color: var(--text-light);
+    padding: 3rem 2rem;
+    font-size: 1.1rem;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.task {
+    background: white;
+    border: 2px solid var(--border-color);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+}
+
+.task.done {
+    background: rgba(22, 163, 74, 0.05);
+    border-color: var(--success-color);
+}
+
+.task.done .task-name {
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+
+.task.overdue {
+    border-left: 5px solid var(--danger-color);
+    background: rgba(220, 38, 38, 0.03);
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-name {
+    display: block;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+    word-break: break-word;
+}
+
+.task-date {
+    display: block;
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+.task-actions {
+    display: flex;
+    gap: 1rem;
+    margin-left: 1rem;
+}
+
+.btn-complete,
+.btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    border-radius: 4px;
+}
+
+.btn-complete {
+    color: var(--success-color);
+}
+
+.btn-complete:hover {
+    background: rgba(22, 163, 74, 0.1);
+    transform: scale(1.2);
+}
+
+.btn-delete {
+    color: var(--danger-color);
+}
+
+.btn-delete:hover {
+    background: rgba(220, 38, 38, 0.1);
+    transform: scale(1.2);
+}
+
+.btn-danger {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .footer {
     background: var(--bg-dark);
     color: white;
@@ -595,6 +782,30 @@ body {
 
     .modal-content {
         width: 95%;
+    }
+
+    .todo-wrapper {
+        padding: 1.5rem;
+    }
+
+    .todo-wrapper h1 {
+        font-size: 2rem;
+    }
+
+    .task {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .task-actions {
+        width: 100%;
+        margin-left: 0;
+        margin-top: 1rem;
+        justify-content: flex-end;
+    }
+
+    .task-form {
+        padding: 1.5rem;
     }
 }
 

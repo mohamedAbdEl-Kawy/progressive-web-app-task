@@ -1,3 +1,4 @@
+//sw.js
 const cacheName = "ITI PWA Task 1";
 const offlinePageUrl = "./pages/offline.html";
 const notFoundPageUrl = "./pages/404.html";
@@ -8,13 +9,17 @@ const assets = [
     "./css/styles.css",
     "./img/logo.jpg",
     "./js/script.js",
+    "./js/app.js",
+    "./idb.js",
     "./pages/about.html",
     "./pages/offline.html",
     "./pages/404.html",
+    "./pages/todo.html",
     "./manifest.json",
 ];
 
 self.addEventListener("install", (installEvent) => {
+    self.skipWaiting();
     installEvent.waitUntil(
         caches
             .open(cacheName)
@@ -40,7 +45,37 @@ self.addEventListener("activate", (activateEvent) => {
                     .map((key) => {
                         return caches.delete(key);
                     }),
-            );
+            ).then(() => self.clients.claim());
+        }),
+    );
+});
+
+self.addEventListener("notificationclick", (event) => {
+    const action = event.action;
+    const taskId = event.notification.data.taskId;
+    const taskName = event.notification.data.taskName;
+
+    event.notification.close();
+
+    if (action === "complete") {
+        self.clients.matchAll().then((clients) => {
+            clients.forEach((client) => {
+                client.postMessage({ type: "completeTask", taskId, taskName });
+            });
+        });
+    }
+
+    event.waitUntil(
+        self.clients.matchAll({ type: "window" }).then((clientList) => {
+            for (let i = 0; i < clientList.length; i++) {
+                const client = clientList[i];
+                if (client.url.includes("todo.html") && "focus" in client) {
+                    return client.focus();
+                }
+            }
+            if (self.clients.openWindow) {
+                return self.clients.openWindow("./pages/todo.html");
+            }
         }),
     );
 });
@@ -95,4 +130,15 @@ self.addEventListener("fetch", (fetchEvent) => {
                 });
         }),
     );
+});
+
+self.addEventListener("message", (event) => {
+    if (event.data && event.data.type === "taskReminder") {
+        const { taskName } = event.data;
+
+        self.registration.showNotification("Task Reminder", {
+            body: `Task '${taskName}' is due soon!`,
+            icon: "img/notification-icon.png",
+        });
+    }
 });
